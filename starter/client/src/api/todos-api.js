@@ -44,6 +44,7 @@ export async function patchTodo(idToken, todoId, updatedTodo) {
 }
 
 export async function deleteTodo(idToken, todoId) {
+  console.log(todoId)
   await Axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/todos/${todoId}`, {
     headers: {
       'Content-Type': 'application/json',

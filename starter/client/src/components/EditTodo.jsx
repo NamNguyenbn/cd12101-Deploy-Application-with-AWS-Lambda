@@ -43,11 +43,11 @@ export function EditTodo() {
 
       setUploadState(UploadState.FetchingPresignedUrl)
       const accessToken = await getAccessTokenSilently({
-        audience: `https://test-endpoint.auth0.com/api/v2/`,
+        audience: `https://dev-825nft27srsciezv.us.auth0.com/api/v2/`,
         scope: 'write:todos'
       })
       const uploadUrl = await getUploadUrl(accessToken, todoId)
-
+      console.log('upload url' + uploadUrl)
       setUploadState(UploadState.UploadingFile)
       await uploadFile(uploadUrl, file)
 
