@@ -17,7 +17,7 @@ provider:
     TODO_TABLE: todo-${self:provider.stage}
     IMAGES_TABLE: Images-${self:provider.stage}
     IMAGE_ID_INDEX: ImageIdIndex
-    IMAGES_S3_BUCKET: udagram-images-namnv41-${self:provider.stage}
+    TODO_S3_BUCKET: udagram-images-namnv41-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
 
 functions:
@@ -120,7 +120,7 @@ functions:
         Action:
           - s3:PutObject
           - s3:GetObject
-        Resource: arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*
+        Resource: arn:aws:s3:::${self:provider.environment.TODO_S3_BUCKET}/*
       - Effect: Allow
         Action:
           - dynamodb:UpdateItem
@@ -169,7 +169,7 @@ resources:
     AttachmentsBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: ${self:provider.environment.IMAGES_S3_BUCKET}
+        BucketName: ${self:provider.environment.TODO_S3_BUCKET}
         PublicAccessBlockConfiguration:
           BlockPublicPolicy: false
           RestrictPublicBuckets: false
@@ -199,5 +199,5 @@ resources:
               Effect: Allow
               Principal: '*'
               Action: 's3:GetObject'
-              Resource: 'arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*'
+              Resource: 'arn:aws:s3:::${self:provider.environment.TODO_S3_BUCKET}/*'
         Bucket: !Ref AttachmentsBucket

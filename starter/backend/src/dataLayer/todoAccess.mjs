@@ -102,7 +102,7 @@ async getTodoById(todoId){
   async getSignedUrl(todoId, userId) {
 
     const command = new PutObjectCommand({
-      Bucket: process.env.IMAGES_S3_BUCKET,
+      Bucket: process.env.TODO_S3_BUCKET,
       Key: {
         todoId
       }
