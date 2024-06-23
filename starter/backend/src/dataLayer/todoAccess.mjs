@@ -27,7 +27,7 @@ export class TodoAccess {
   }
 
 async getTodoById(todoId){
-  const result = await dynamoDbClient
+  const result = await this.dynamoDbClient
     .query({
       TableName: this.todoTable,
       IndexName: this.todoIdIndex,
@@ -69,7 +69,23 @@ async getTodoById(todoId){
       ReturnValues:"UPDATED_NEW"  })
     return todo
   }
-
+  async updateUrl(todo) {
+    console.log(`updateUrl a todo with id ${todo.todoId}`)
+    console.log(`updateUrl a todo with userId ${todo.userId}`)
+    var todoId = todo.todoId;
+    var userId = todo.userId
+    await this.dynamoDbClient.update({
+      TableName: this.todoTable,
+      Key: {
+        todoId,
+        userId
+      },      
+      UpdateExpression: "set attachmentUrl=:attachmentUrl",      ExpressionAttributeValues:{        
+        ":attachmentUrl": todo.attachmentUrl
+      },    
+      ReturnValues:"UPDATED_NEW"  })
+    return todo
+  }
   async deleteTodo(todoId, userId) {
     console.log(`Delete a todo with id ${todoId}`)
 
@@ -88,8 +104,7 @@ async getTodoById(todoId){
     const command = new PutObjectCommand({
       Bucket: process.env.IMAGES_S3_BUCKET,
       Key: {
-        todoId,
-        userId
+        todoId
       }
     })
     console.log(JSON.stringify(command))

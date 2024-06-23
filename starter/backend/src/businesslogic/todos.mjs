@@ -35,6 +35,14 @@ export async function updateTodo(updateTodoRequest, todoId, userId) {
       done: updateTodoRequest.done
     })
 }
+export async function updateUrl(attachmentUrl, todoId, userId) {
+
+  return await todoAccess.updateUrl({
+    todoId: todoId,
+    userId: userId,
+    attachmentUrl: attachmentUrl
+  })
+}
 export async function deleteTodo(todoId, userId) {
   return todoAccess.deleteTodo(todoId, userId)
 }
