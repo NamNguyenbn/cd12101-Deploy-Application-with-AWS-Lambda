@@ -17,13 +17,19 @@ export class TodoAccess {
     this.s3Client = s3Client
   }
 
-  async getAllTodo() {
+  async getAllTodo(userId) {
     console.log('Getting all todos')
 
-    const result = await this.dynamoDbClient.scan({
-      TableName: this.todoTable
-    })
-    return result.Items
+    const params = {
+      TableName: this.todoTable,
+      KeyConditionExpression: 'userId = :userId',
+      ExpressionAttributeValues: {
+        ':userId': userId,
+      },
+    };
+
+    const result = await this.dynamoDbClient.query(params);
+    return result.Items;
   }
 
 async getTodoById(todoId){

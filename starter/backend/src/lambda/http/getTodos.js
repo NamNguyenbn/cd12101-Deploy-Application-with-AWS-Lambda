@@ -4,6 +4,7 @@ import middy from '@middy/core'
 import cors from '@middy/http-cors'
 import httpErrorHandler from '@middy/http-error-handler'
 import { getAllTodo } from '../../businesslogic/todos.mjs'
+import { getUserId } from '../utils.mjs'
 
 export const handler = middy()
   .use(httpErrorHandler())
@@ -14,8 +15,8 @@ export const handler = middy()
   )
   .handler(async (event) => {
     console.log('Processing event: ', event)
-
-    const todo = await getAllTodo()
+    const userId = getUserId(event)
+    const todo = await getAllTodo(userId)
 
     return {
       statusCode: 200,
