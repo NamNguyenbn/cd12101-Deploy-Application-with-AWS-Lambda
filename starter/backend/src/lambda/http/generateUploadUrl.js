@@ -12,6 +12,17 @@ export async function handler(event) {
 
   // var result = await updateUrl(`https://${process.env.TODO_S3_BUCKET}.s3.amazonaws.com/${todoId}`, todoId, userId)
   // console.log('result ' + JSON.stringify(result))
-  return await getSignedUrl(todoId, userId)
+  var uploadUrl = await getSignedUrl(todoId, userId)
+  var result = await updateUrl(`https://${process.env.TODO_S3_BUCKET}.s3.amazonaws.com/${todoId}`,todoId, userId)
+  return {
+    statusCode: 201,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true
+    },
+   body: JSON.stringify({
+    uploadUrl
+    })
+  }
 }
 

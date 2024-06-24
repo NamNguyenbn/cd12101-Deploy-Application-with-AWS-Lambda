@@ -47,5 +47,5 @@ export async function deleteTodo(todoId, userId) {
   return todoAccess.deleteTodo(todoId, userId)
 }
 export async function getSignedUrl(todoId, userId) {
-  return await todoAccess.getSignedUrl(todoId, userId)
+  return await todoAccess.getSignedUrlAccess(todoId, userId)
 }

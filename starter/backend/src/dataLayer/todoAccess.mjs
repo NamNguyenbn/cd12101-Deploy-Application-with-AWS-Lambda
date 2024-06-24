@@ -9,12 +9,12 @@ export class TodoAccess {
     documentClient = AWSXRay.captureAWSv3Client(new DynamoDB()),
     todoTable = process.env.TODO_TABLE,
     todoIdIndex = process.env.IMAGE_ID_INDEX,
-    s3Client = null
+    s3Client = new S3Client()
   ) {
     this.documentClient = documentClient
     this.todoTable = todoTable
     this.dynamoDbClient = DynamoDBDocument.from(this.documentClient)
-    this.s3Client = new S3Client()
+    this.s3Client = s3Client
   }
 
   async getAllTodo() {
@@ -74,6 +74,7 @@ async getTodoById(todoId){
     console.log(`updateUrl a todo with userId ${todo.userId}`)
     var todoId = todo.todoId;
     var userId = todo.userId
+     //;
     await this.dynamoDbClient.update({
       TableName: this.todoTable,
       Key: {
@@ -86,6 +87,7 @@ async getTodoById(todoId){
       ReturnValues:"UPDATED_NEW"  })
     return todo
   }
+ 
   async deleteTodo(todoId, userId) {
     console.log(`Delete a todo with id ${todoId}`)
 
@@ -99,20 +101,15 @@ async getTodoById(todoId){
 
     return true
   }
-  async getSignedUrl(todoId, userId) {
-
+  async getSignedUrlAccess(todoId, userId) {
     const command = new PutObjectCommand({
-      Bucket: process.env.TODO_S3_BUCKET,
-      Key: {
-        todoId
-      }
+      Bucket: process.env.TODO_S3_BUCKET, Key: todoId
     })
-    console.log(JSON.stringify(command))
-    console.log(JSON.stringify(this.s3Client))
-
+    
     const url = await getSignedUrl(this.s3Client, command, {
       expiresIn: parseInt(process.env.SIGNED_URL_EXPIRATION)
     })
-    return url
+
+    return url;
   }
 }
