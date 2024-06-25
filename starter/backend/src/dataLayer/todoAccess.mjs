@@ -33,6 +33,7 @@ export class TodoAccess {
   }
 
 async getTodoById(todoId){
+  console.log('todoId ' + todoId)
   const result = await this.dynamoDbClient
     .query({
       TableName: this.todoTable,
@@ -108,6 +109,8 @@ async getTodoById(todoId){
     return true
   }
   async getSignedUrlAccess(todoId, userId) {
+    console.log(`getSignedUrlAccess a todo with id ${todoId}`)
+    console.log(`getSignedUrlAccess a todo with userId ${userId}`)
     const command = new PutObjectCommand({
       Bucket: process.env.TODO_S3_BUCKET, Key: todoId
     })

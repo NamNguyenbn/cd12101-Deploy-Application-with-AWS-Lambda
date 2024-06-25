@@ -28,6 +28,7 @@ Jtl0d1wfSNJNKlIc6LiNp6ynQTZ8dNK/Cf6eVVii64p4mT3YZm8RQ5i8+Slvu6fL
 
 export async function handler(event) {
   try {
+    console.log('Processing event: ', event)
     const jwtToken = await verifyToken(event.authorizationToken)
 
     return {
@@ -63,6 +64,7 @@ export async function handler(event) {
 }
 
 async function verifyToken(authHeader) {
+  console.log('authHeader: ', authHeader)
   const token = getToken(authHeader)
   const jwt = jsonwebtoken.decode(token, { complete: true })
 
@@ -71,6 +73,7 @@ async function verifyToken(authHeader) {
 }
 
 function getToken(authHeader) {
+  console.log('authHeader: ', authHeader)
   if (!authHeader) throw new Error('No authentication header')
 
   if (!authHeader.toLowerCase().startsWith('bearer '))

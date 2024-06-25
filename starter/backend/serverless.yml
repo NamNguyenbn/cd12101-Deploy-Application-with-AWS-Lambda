@@ -19,27 +19,6 @@ provider:
     IMAGE_ID_INDEX: ImageIdIndex
     TODO_S3_BUCKET: udagram-images-namnv41-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
-  iam:
-    role:
-      statements:
-        - Effect: Allow
-          Action:
-            - dynamodb:Query
-            - dynamodb:PutItem
-            - dynamodb:UpdateItem
-            - dynamodb:DeleteItem
-          Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}
-        - Effect: Allow
-          Action:
-            - s3:PutObject
-            - s3:GetObject
-          Resource: arn:aws:s3:::${self:provider.environment.TODO_S3_BUCKET}/*
-        - Effect: "Allow"
-          Action:
-            - "xray:PutTraceSegments"
-            - "xray:PutTelemetryRecords"
-          Resource:
-            - "*"
 
 functions:
 
@@ -63,6 +42,7 @@ functions:
           - dynamodb:GetItem
           - dynamodb:UpdateItem
           - dynamodb:PutItem
+          - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}
       - Effect: "Allow"
         Action:
@@ -79,6 +59,9 @@ functions:
           path: todos
           cors: true
           authorizer: Auth
+          request:
+            schemas:
+              application/json: ${file(create-todo-schema.json)}          
     iamRoleStatementsInherit: true    
     iamRoleStatements:
       - Effect: Allow
